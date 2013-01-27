@@ -74,7 +74,8 @@ def fetch_kafka():
     print "Unpacking ", tgz
     exe('tar -zxvf '+tgz)
     global KAFKA_SRC
-    KAFKA_SRC = rsplit(tgz, ".tgz", 1)[0]
+    if KAFKA_SRC is None:
+        KAFKA_SRC = rsplit(tgz, ".tgz", 1)[0]
 
 def prepare_work_area():
     print "Creating work dir ", workdir
@@ -202,7 +203,8 @@ def usage():
     print ' REQUIRED [-l, --link] <kafka url>  download and unpack source release (assumes a tgz that unpacks to "kafka")\n'
     print ' REQUIRED [-m, --maintainer] <package>  package maintainer\n'
     print ' REQUIRED [-v, --vendor] <vendor>  package vendor\n'
-    print ' OPTIONAL [-p, --package-release] <relase version>  package release version (default is 1)\n'
+    print ' OPTIONAL [-p, --package-release] <release version>  package release version (default is 1)\n'
+    print ' OPTIONAL [-s, --source-folder] <folder name>  name of unpacked source (default takes from downloaded file) \n'
 
 def main(argv=None):
     global RELEASE_VERSION
@@ -211,11 +213,12 @@ def main(argv=None):
     global MAINTAINER
     global DOWNLOAD_URL
     global VENDOR
+    global KAFKA_SRC
     if argv is None:
         argv = sys.argv
     try:
         try:
-            opts, args = getopt.getopt(argv[1:], "r:l:h:p:m:v", ["release", "link", "help", "package-release", "maintainer", "vendor"])
+            opts, args = getopt.getopt(argv[1:], "r:l:p:m:v:s:h", ["release", "link",  "package-release", "maintainer", "vendor", "source-folder","help"])
             for o, a in opts:
                 if o in ("--help"):
                     usage()
@@ -231,6 +234,8 @@ def main(argv=None):
                     MAINTAINER = a
                 elif o in ("-v", "--vendor"):
                     VENDOR = a
+                elif o in ("-s", "--source-folder"):
+                    KAFKA_SRC = a
         except getopt.error, msg:
             raise Usage(msg)
         cleanup()
