@@ -1,0 +1,7 @@
+kafka-package
+Copyright 2012-2013 Bill de hÓra.
+
+The kafka-server script is derived from nmilford's Kafka-0.7 spec (https://github.com/nmilford/specfiles/tree/master/kafka-0.7)
+
+The .deb file is built using fpm (https://github.com/jordansissel/fpm/wiki).
+
