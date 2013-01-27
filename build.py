@@ -73,6 +73,8 @@ def fetch_kafka():
     tgz=rsplit(DOWNLOAD_URL, "/", 1)[1]
     print "Unpacking ", tgz
     exe('tar -zxvf '+tgz)
+    global KAFKA_SRC
+    KAFKA_SRC = rsplit(tgz, ".tgz", 1)[0]
 
 def prepare_work_area():
     print "Creating work dir ", workdir
@@ -95,10 +97,10 @@ def add_base_files():
     exe('cp preinst %s' %(workdir,))
     exe('cp postinst %s' %(workdir,))
     exe('cp log4j.properties %s/build/etc/kafka' %(workdir,))
-    exe('cp %s/%s/config/server.properties %s/build/etc/kafka' %(workdir, kafka_src, workdir))
-    exe('cp %s/%s/config/consumer.properties %s/build/etc/kafka' %(workdir, kafka_src, workdir))
-    exe('cp %s/%s/config/producer.properties %s/build/etc/kafka' %(workdir, kafka_src, workdir))
-    exe('cp %s/%s/config/zookeeper.properties %s/build/etc/kafka' %(workdir, kafka_src, workdir))
+    exe('cp %s/%s/config/server.properties %s/build/etc/kafka' %(workdir, KAFKA_SRC, workdir))
+    exe('cp %s/%s/config/consumer.properties %s/build/etc/kafka' %(workdir, KAFKA_SRC, workdir))
+    exe('cp %s/%s/config/producer.properties %s/build/etc/kafka' %(workdir, KAFKA_SRC, workdir))
+    exe('cp %s/%s/config/zookeeper.properties %s/build/etc/kafka' %(workdir, KAFKA_SRC, workdir))
 
 def build_kafka():
     print "Updating Kafka "
@@ -122,7 +124,7 @@ def set_the_server_data_path():
 
 def create_an_deb():
     print "Preparing .deb "
-    deb_name=kafka_src
+    deb_name="kafka"
     deb_package_version=REL_VERSION
     deb_description='Apache Kafka is a distributed publish-subscribe messaging system.'
     deb_url="https://kafka.apache.org/"
@@ -238,7 +240,7 @@ def main(argv=None):
         fetch_kafka()
         os.chdir(origdir)
         add_base_files()
-        os.chdir('%s/%s/%s'%(origdir,workdir,kafka_src))
+        os.chdir('%s/%s/%s'%(origdir,workdir,KAFKA_SRC))
         build_kafka()
         add_kafka_build()
         os.chdir(origdir)
@@ -258,9 +260,9 @@ DOWNLOAD_URL=None
 REL_VERSION="1"
 MAINTAINER = None
 VENDOR=None
+KAFKA_SRC=None
 
 workdir='out'
-kafka_src="kafka"
 origdir = os.getcwd()
 
 if __name__ == "__main__":

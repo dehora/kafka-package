@@ -10,7 +10,7 @@ Creates a kafka .deb file via [fpm](https://github.com/jordansissel/fpm/wiki).
 
      REQUIRED [-r, --release] <kafka version>  create a deb named as this version
 
-     REQUIRED [-l, --link] <kafka url> download/unpack source release (assumes a tgz that unpacks to "kafka")
+     REQUIRED [-l, --link] <kafka url> download/unpack source release (assumes a tgz)
 
      REQUIRED [-m, --maintainer] <package> package maintainer
 
